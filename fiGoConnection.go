@@ -24,6 +24,12 @@ var (
 	ErrHTTPUnauthorized = errors.New("invalid authorization")
 )
 
+// IConnection represent an interface for connections.
+// This provides to use fakeConnection and a real-figoConnection
+type IConnection interface {
+	CreateUser(name string, email string, password string) ([]byte, error)
+}
+
 // Connection represent a connection to figo
 type Connection struct {
 	AuthString string
