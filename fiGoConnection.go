@@ -12,8 +12,9 @@ import (
 )
 
 const (
-	baseURL     = "https://api.figo.me"
-	authUserURL = "/auth/user"
+	baseURL      = "https://api.figo.me"
+	authUserURL  = "/auth/user"
+	authTokenURL = "/auth/token"
 )
 
 var (
@@ -28,6 +29,8 @@ var (
 // This provides to use fakeConnection and a real-figoConnection
 type IConnection interface {
 	CreateUser(name string, email string, password string) ([]byte, error)
+	// http://docs.figo.io/#credential-login
+	CredentialLogin(username string, password string) ([]byte, error)
 }
 
 // Connection represent a connection to figo
@@ -62,20 +65,46 @@ func (connection *Connection) CreateUser(name string, email string, password str
 		return nil, err
 	}
 
+	return buildRequestAndCheckResponse(request, connection.AuthString)
+}
+
+// CredentialLogin create a login.
+// -> First you have to create a user (CreateUser)
+func (connection *Connection) CredentialLogin(username string, password string) ([]byte, error) {
+	// build url
+	url := baseURL + authTokenURL
+
+	// build jsonBody
+	requestBody := map[string]string{
+		"grant_type": "password",
+		"username":   username,
+		"password":   password}
+	jsonBody, err := json.Marshal(requestBody)
+
+	// build request
+	request, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBody))
+	if err != nil {
+		return nil, err
+	}
+
+	return buildRequestAndCheckResponse(request, connection.AuthString)
+}
+
+func buildRequestAndCheckResponse(request *http.Request, authString string) ([]byte, error) {
 	// set headers
 	request.Header.Set("Content-Type", "application/json")
-	request.Header.Set("Authorization", connection.AuthString)
+	request.Header.Set("Authorization", authString)
 
 	// setup client
 	client := &http.Client{}
-	resp, err := client.Do(request)
+	response, err := client.Do(request)
 	if err != nil {
 		return nil, err
 	}
 
 	// get response
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	defer response.Body.Close()
+	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return nil, err
 	}
