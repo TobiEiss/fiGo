@@ -7,7 +7,7 @@ If you want to use this, you need a clientID and a clientSecret. You will get th
 
 Currently implemented:
 * [create a user](#create-a-user) ([figo-API-reference](http://docs.figo.io/#create-new-figo-user))
-* [credential login](#credential-login) ([figo-API-reference](http://docs.figo.io/#credential-login))
+* [credential login](#credentials-login) ([figo-API-reference](http://docs.figo.io/#credential-login))
 
 ## Getting started
 
