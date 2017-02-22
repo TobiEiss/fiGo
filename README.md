@@ -53,7 +53,7 @@ if ok {
 }
 ```
 
-### Credetial login
+### Credentials login
 
 Login your users:
 
