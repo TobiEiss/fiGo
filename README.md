@@ -7,7 +7,7 @@ If you want to use this, you need a clientID and a clientSecret. You will get th
 
 Currently implemented:
 * [create a user](#create-a-user) ([figo-API-reference](http://docs.figo.io/#create-new-figo-user))
-* [create a user](#credential-login) ([figo-API-reference](http://docs.figo.io/#credential-login))
+* [credential login](#credential-login) ([figo-API-reference](http://docs.figo.io/#credential-login))
 
 ## Getting started
 
@@ -52,3 +52,26 @@ if ok {
     // do whatever you want with the "recoveryPassword"
 }
 ```
+
+### Credetial login
+
+Login your users:
+
+```golang
+userAsJson, err := connection.CredentialLogin("test@test.de", "mysecretpassword")
+// TODO error handling
+```
+
+You will get all relevant user data like this:
+```json
+{
+   "access_token":"abcdefghijklmnopqrstuvwxyz",
+   "token_type":"Bearer",
+   "expires_in":600.0,
+   "refresh_token":"abcdefghijklmnopqrstuvwxyz",
+   "scope":"accounts=rw transactions=rw balance=rw user=rw offline create_user "
+}
+```
+
+Tip: Use [gabs](https://github.com/Jeffail/gabs) to get specific fields.  
+Notice: Keep the `access_token` for other user-activities.
