@@ -2,8 +2,14 @@ package fiGo
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"math/rand"
+)
+
+var (
+	// ErrCantFindUser means "Cant find user in fake-figo"
+	ErrCantFindUser = errors.New("cant find user")
 )
 
 // FakeConnection is a fakes the figoAPI
@@ -52,7 +58,24 @@ func (fakeConnection *FakeConnection) CredentialLogin(username string, password 
 			return json.Marshal(response)
 		}
 	}
-	return nil, nil
+	return nil, ErrCantFindUser
+}
+
+// SetupNewBankAccount sets up a new bank account for an existing account.
+// -> Notice: you need an accessToken from CredentialLogin
+func (fakeConnection *FakeConnection) SetupNewBankAccount(accessToken string, bankCode string, country string, credentials []string) ([]byte, error) {
+	for _, user := range fakeConnection.Users {
+		if user["access_token"] == accessToken {
+			user["banks"] = map[string]interface{}{
+				"bankCode":    bankCode,
+				"country":     country,
+				"credentials": credentials,
+			}
+			response := map[string]string{"task_token": randStringRunes(10)}
+			return json.Marshal(response)
+		}
+	}
+	return nil, ErrCantFindUser
 }
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")

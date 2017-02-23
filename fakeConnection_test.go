@@ -5,6 +5,7 @@ import (
 	"log"
 	"testing"
 
+	"github.com/Jeffail/gabs"
 	"github.com/TobiEiss/fiGo"
 )
 
@@ -68,6 +69,37 @@ func TestCredentialLogin(t *testing.T) {
 	// check informations
 	if userAsMap["access_token"] == "" || userAsMap["expires_in"] == 0 ||
 		userAsMap["refresh_token"] == "" || userAsMap["scope"] == nil || userAsMap["token_type"] == nil {
+		t.Fail()
+	}
+}
+
+// TestAddAccount
+// 1. Create a new user
+// 2. Login new TestUser
+// 3. Add account
+// -> Check task_token
+func TestAddAccount(t *testing.T) {
+	username := "test@test.de"
+	password := "mySuperSecretPassword"
+
+	// create a new fakeConnection
+	fakeConnection := fiGo.NewFakeConnection()
+	// "store" a user
+	fakeConnection.CreateUser("TestUser", username, password)
+	// login
+	userByte, _ := fakeConnection.CredentialLogin(username, password)
+	jsonParsed, _ := gabs.ParseJSON(userByte)
+	accessToken, _ := jsonParsed.Path("access_token").Data().(string)
+
+	// add account
+	responseByte, err := fakeConnection.SetupNewBankAccount(accessToken, "90090042", "de", []string{"demo", "demo"})
+	if err != nil {
+		t.Fail()
+	}
+
+	jsonParsed, err = gabs.ParseJSON(responseByte)
+	taskToken, ok := jsonParsed.Path("task_token").Data().(string)
+	if taskToken == "" || !ok || err != nil {
 		t.Fail()
 	}
 }
