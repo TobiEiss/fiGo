@@ -8,6 +8,7 @@ If you want to use this, you need a clientID and a clientSecret. You will get th
 Currently implemented:
 * [create a user](#create-a-user) ([figo-API-reference](http://docs.figo.io/#create-new-figo-user))
 * [credential login](#credentials-login) ([figo-API-reference](http://docs.figo.io/#credential-login))
+* [setup new bank account](#setup-new-bank-account) ([figo-API-reference](http://docs.figo.io/#setup-new-bank-account))
 
 ## Getting started
 
@@ -75,3 +76,16 @@ You will get all relevant user data like this:
 
 Tip: Use [gabs](https://github.com/Jeffail/gabs) to get specific fields.  
 Notice: Keep the `access_token` for other user-activities.
+
+### Setup new bank account
+
+Add a bankAccount to an existing figo-account
+
+```golang
+jsonAnswer, err := connection.SetupNewBankAccount(value, "90090042", "de", []string{"demo", "demo"})
+```
+
+The `jsonAnswer` contains a `task_token`. You need this to sync the figo-account with a real bank-account.
+```json
+{"task_token": "abcdefghijklmnopqrstuvwxyz"}
+```
