@@ -1,7 +1,6 @@
 package fiGo_test
 
 import (
-	"log"
 	"testing"
 
 	"github.com/TobiEiss/fiGo"
@@ -40,5 +39,5 @@ func TestSetupNewBankAccount(t *testing.T) {
 		t.Fail()
 	}
 
-	log.Println(string(jsonAnswer))
+	t.Log(string(jsonAnswer))
 }

@@ -2,7 +2,6 @@ package fiGo_test
 
 import (
 	"encoding/json"
-	"log"
 	"testing"
 
 	"github.com/Jeffail/gabs"
@@ -27,16 +26,12 @@ func TestStoreUser(t *testing.T) {
 
 	// "store" a user
 	responseAsBytes, err := fakeConnection.CreateUser("TestUser", "test@test.de", "mySuperSecretPassword")
-	if err != nil {
-		t.Fail()
-	}
+	failOnError(t, err)
 
 	// try to get the recovery-password
 	var responseAsMap map[string]string
 	err = json.Unmarshal(responseAsBytes, &responseAsMap)
-	if err != nil {
-		t.Fail()
-	}
+	failOnError(t, err)
 }
 
 // TestCredentialLogin tests a login.
@@ -54,17 +49,12 @@ func TestCredentialLogin(t *testing.T) {
 
 	// login
 	userByte, err := fakeConnection.CredentialLogin(username, password)
-	if err != nil {
-		t.Fail()
-	}
+	failOnError(t, err)
 
 	// try to get informations
 	var userAsMap map[string]interface{}
 	err = json.Unmarshal(userByte, &userAsMap)
-	log.Println(string(userByte))
-	if err != nil {
-		t.Fail()
-	}
+	failOnError(t, err)
 
 	// check informations
 	if userAsMap["access_token"] == "" || userAsMap["expires_in"] == 0 ||
@@ -93,13 +83,18 @@ func TestAddAccount(t *testing.T) {
 
 	// add account
 	responseByte, err := fakeConnection.SetupNewBankAccount(accessToken, "90090042", "de", []string{"demo", "demo"})
-	if err != nil {
-		t.Fail()
-	}
+	failOnError(t, err)
 
 	jsonParsed, err = gabs.ParseJSON(responseByte)
 	taskToken, ok := jsonParsed.Path("task_token").Data().(string)
 	if taskToken == "" || !ok || err != nil {
+		t.Fail()
+	}
+}
+
+func failOnError(t *testing.T, err error) {
+	if err != nil {
+		t.Log(err)
 		t.Fail()
 	}
 }
