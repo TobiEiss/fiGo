@@ -78,6 +78,17 @@ func (fakeConnection *FakeConnection) SetupNewBankAccount(accessToken string, ba
 	return nil, ErrCantFindUser
 }
 
+// DeleteUser deletes a user from fakeConnection
+// Notice: you need an accessToken from CredentialLogin
+func (fakeConnection *FakeConnection) DeleteUser(accessToken string) ([]byte, error) {
+	for index, user := range fakeConnection.Users {
+		if user["access_token"] == accessToken {
+			fakeConnection.Users = append(fakeConnection.Users[:index], fakeConnection.Users[index+1:]...)
+		}
+	}
+	return nil, ErrCantFindUser
+}
+
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 func randStringRunes(n int) string {

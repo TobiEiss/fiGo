@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/Jeffail/gabs"
@@ -16,6 +17,7 @@ const (
 	authUserURL     = "/auth/user"
 	authTokenURL    = "/auth/token"
 	restAccountsURL = "/rest/accounts"
+	restUserURL     = "/rest/user"
 )
 
 var (
@@ -36,6 +38,10 @@ type IConnection interface {
 	// http://docs.figo.io/#credential-login
 	// Login with email (aka username) and password
 	CredentialLogin(username string, password string) ([]byte, error)
+
+	// http://docs.figo.io/#delete-current-user
+	// Remove user with an accessToken. You get the token after successfully login
+	DeleteUser(accessToken string) ([]byte, error)
 
 	// http://docs.figo.io/#setup-new-bank-account
 	// Add a BankAccount to figo-Account
@@ -126,6 +132,23 @@ func (connection *Connection) SetupNewBankAccount(accessToken string, bankCode s
 	return buildRequestAndCheckResponse(request, accessToken)
 }
 
+// DeleteUser deletes an existing user
+func (connection *Connection) DeleteUser(accessToken string) ([]byte, error) {
+	// build accessToken
+	accessToken = "Bearer " + accessToken
+
+	// build url
+	url := baseURL + restUserURL
+
+	// build request
+	request, err := http.NewRequest("DELETE", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return buildRequestAndCheckResponse(request, accessToken)
+}
+
 func buildRequestAndCheckResponse(request *http.Request, authString string) ([]byte, error) {
 	// set headers
 	request.Header.Set("Content-Type", "application/json")
@@ -145,14 +168,21 @@ func buildRequestAndCheckResponse(request *http.Request, authString string) ([]b
 		return nil, err
 	}
 
+	log.Println(string(body))
+
 	// check response for errors
-	jsonParsed, err := gabs.ParseJSON(body)
-	value, ok := jsonParsed.Path("error.code").Data().(float64)
-	if ok {
-		if value == 30002 {
-			return body, ErrUserAlreadyExists
-		} else if value == 90000 {
-			return body, ErrHTTPUnauthorized
+	if string(body) != "" {
+		jsonParsed, err := gabs.ParseJSON(body)
+		if err != nil {
+			return nil, err
+		}
+		value, ok := jsonParsed.Path("error.code").Data().(float64)
+		if ok {
+			if value == 30002 {
+				return body, ErrUserAlreadyExists
+			} else if value == 90000 {
+				return body, ErrHTTPUnauthorized
+			}
 		}
 	}
 
