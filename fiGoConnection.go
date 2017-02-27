@@ -13,11 +13,12 @@ import (
 )
 
 const (
-	baseURL         = "https://api.figo.me"
-	authUserURL     = "/auth/user"
-	authTokenURL    = "/auth/token"
-	restAccountsURL = "/rest/accounts"
-	restUserURL     = "/rest/user"
+	baseURL             = "https://api.figo.me"
+	authUserURL         = "/auth/user"
+	authTokenURL        = "/auth/token"
+	restAccountsURL     = "/rest/accounts"
+	restUserURL         = "/rest/user"
+	restTransactionsURL = "/rest/transactions"
 )
 
 var (
@@ -48,6 +49,10 @@ type IConnection interface {
 	// -> yout get accessToken from the login-response
 	// -> country is something like "de" (for germany)
 	SetupNewBankAccount(accessToken string, bankCode string, country string, credentials []string) ([]byte, error)
+
+	// http://docs.figo.io/#retrieve-transactions-of-one-or-all-account
+	// Retrieves all Transactions
+	RetrieveTransactionsOfAllAccounts(accessToken string) ([]byte, error)
 }
 
 // Connection represent a connection to figo
@@ -142,6 +147,23 @@ func (connection *Connection) DeleteUser(accessToken string) ([]byte, error) {
 
 	// build request
 	request, err := http.NewRequest("DELETE", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return buildRequestAndCheckResponse(request, accessToken)
+}
+
+// RetrieveTransactionsOfAllAccounts with accessToken from login-session
+func (connection *Connection) RetrieveTransactionsOfAllAccounts(accessToken string) ([]byte, error) {
+	// build accessToken
+	accessToken = "Bearer " + accessToken
+
+	// build url
+	url := baseURL + restTransactionsURL
+
+	// build request
+	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}

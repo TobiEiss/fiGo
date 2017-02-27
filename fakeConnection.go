@@ -89,6 +89,11 @@ func (fakeConnection *FakeConnection) DeleteUser(accessToken string) ([]byte, er
 	return nil, ErrCantFindUser
 }
 
+// RetrieveTransactionsOfAllAccounts TODO
+func (fakeConnection *FakeConnection) RetrieveTransactionsOfAllAccounts(accessToken string) ([]byte, error) {
+	return nil, nil
+}
+
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 func randStringRunes(n int) string {
