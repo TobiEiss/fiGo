@@ -89,6 +89,11 @@ func (fakeConnection *FakeConnection) DeleteUser(accessToken string) ([]byte, er
 	return nil, ErrCantFindUser
 }
 
+// CreateNewSynchronizationTask should generate new transactions TODO
+func (fakeConnection *FakeConnection) CreateNewSynchronizationTask(accessToken string, taskToken string) ([]byte, error) {
+	return nil, nil
+}
+
 // RetrieveTransactionsOfAllAccounts TODO
 func (fakeConnection *FakeConnection) RetrieveTransactionsOfAllAccounts(accessToken string) ([]byte, error) {
 	return nil, nil
