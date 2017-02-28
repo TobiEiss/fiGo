@@ -176,16 +176,10 @@ func (connection *Connection) RequestForTask(accessToken string, taskToken strin
 	accessToken = "Bearer " + accessToken
 
 	// build url
-	url := connection.Host + taskProgressURL
-
-	// build jsonBody
-	requestBody := map[string]interface{}{
-		"id": taskToken,
-	}
-	jsonBody, err := json.Marshal(requestBody)
+	url := connection.Host + taskProgressURL + "?id=" + taskToken
 
 	// build request
-	request, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBody))
+	request, err := http.NewRequest("POST", url, nil)
 	if err != nil {
 		return nil, err
 	}
