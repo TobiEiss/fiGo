@@ -45,10 +45,10 @@ You will get back a recovery-password in JSON-format as byte array:
 {"recovery_password": "abcd-efgh-ijkl-mnop"}
 ```
 
-Fast way to get this:
+Fast way to get this (use [gabs](https://github.com/Jeffail/gabs)):
 ```golang
 jsonParsed, err := gabs.ParseJSON(recPwByteArray)
-recoveryPassword, ok := jsonParsed.Path("error.code").Data().(string)
+recoveryPassword, ok := jsonParsed.Path("recovery_password").Data().(string)
 if ok {
     // do whatever you want with the "recoveryPassword"
 }
