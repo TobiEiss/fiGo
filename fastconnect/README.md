@@ -8,5 +8,5 @@ THIS IST WIP!!!
 [x] loginUser
 [x] addBankCredentials
 [ ] getTransactions
-[x] synchronize
+[x] request task state
 ```

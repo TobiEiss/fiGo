@@ -20,6 +20,7 @@ const (
 	restUserURL         = "/rest/user"
 	restTransactionsURL = "/rest/transactions"
 	restSyncURL         = "/rest/sync"
+	taskProgressURL     = "/task/progress"
 )
 
 var (
@@ -54,10 +55,10 @@ type IConnection interface {
 	// -> country is something like "de" (for germany)
 	SetupNewBankAccount(accessToken string, bankCode string, country string, credentials []string) ([]byte, error)
 
-	// http://docs.figo.io/#create-new-synchronization-task
-	// start synchronize task
+	// http://docs.figo.io/#poll-task-state
+	// request a task
 	// -> you need a taskToken. You will get this from SetupNewBankAccount
-	CreateNewSynchronizationTask(accessToken string, taskToken string) ([]byte, error)
+	RequestForTask(accessToken string, taskToken string) ([]byte, error)
 
 	// http://docs.figo.io/#retrieve-transactions-of-one-or-all-account
 	// Retrieves all Transactions
@@ -169,17 +170,17 @@ func (connection *Connection) DeleteUser(accessToken string) ([]byte, error) {
 	return buildRequestAndCheckResponse(request, accessToken)
 }
 
-// CreateNewSynchronizationTask starts a new task to synchronize real bankAccount and figoAccount
-func (connection *Connection) CreateNewSynchronizationTask(accessToken string, taskToken string) ([]byte, error) {
+// RequestForTask starts a new task to synchronize real bankAccount and figoAccount
+func (connection *Connection) RequestForTask(accessToken string, taskToken string) ([]byte, error) {
 	// build accessToken
 	accessToken = "Bearer " + accessToken
 
 	// build url
-	url := connection.Host + restSyncURL
+	url := connection.Host + taskProgressURL
 
 	// build jsonBody
 	requestBody := map[string]interface{}{
-		"task_token": taskToken,
+		"id": taskToken,
 	}
 	jsonBody, err := json.Marshal(requestBody)
 
