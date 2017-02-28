@@ -41,6 +41,11 @@ func (fakeConnection *FakeConnection) CreateUser(name string, email string, pass
 	return json.Marshal(responseMap)
 }
 
+// SetHost is not needed
+func (fakeConnection *FakeConnection) SetHost(host string) {
+	// do nothing
+}
+
 // CredentialLogin returns a token
 // -> Notice: first add a user via CreateUser!
 func (fakeConnection *FakeConnection) CredentialLogin(username string, password string) ([]byte, error) {

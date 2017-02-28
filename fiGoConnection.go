@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	baseURL             = "https://api.figo.me"
+	defaultBaseURL      = "https://api.figo.me"
 	authUserURL         = "/auth/user"
 	authTokenURL        = "/auth/token"
 	restAccountsURL     = "/rest/accounts"
@@ -33,6 +33,9 @@ var (
 // IConnection represent an interface for connections.
 // This provides to use fakeConnection and a real-figoConnection
 type IConnection interface {
+	// Set another host
+	SetHost(host string)
+
 	// http://docs.figo.io/#create-new-figo-user
 	// Ask user for new name, email and password
 	CreateUser(name string, email string, password string) ([]byte, error)
@@ -64,6 +67,7 @@ type IConnection interface {
 // Connection represent a connection to figo
 type Connection struct {
 	AuthString string
+	Host       string
 }
 
 // NewFigoConnection creates a new connection.
@@ -71,14 +75,19 @@ type Connection struct {
 func NewFigoConnection(clientID string, clientSecret string) *Connection {
 	authInfo := clientID + ":" + clientSecret
 	authString := "Basic " + base64.URLEncoding.EncodeToString([]byte(authInfo))
-	return &Connection{AuthString: authString}
+	return &Connection{AuthString: authString, Host: defaultBaseURL}
+}
+
+// SetHost sets a new host
+func (connection *Connection) SetHost(host string) {
+	connection.Host = host
 }
 
 // CreateUser creates a new user.
 // Ask User for name, email and a password
 func (connection *Connection) CreateUser(name string, email string, password string) ([]byte, error) {
 	// build url
-	url := baseURL + authUserURL
+	url := connection.Host + authUserURL
 
 	// build jsonBody
 	requestBody := map[string]string{
@@ -100,7 +109,7 @@ func (connection *Connection) CreateUser(name string, email string, password str
 // -> First you have to create a user (CreateUser)
 func (connection *Connection) CredentialLogin(username string, password string) ([]byte, error) {
 	// build url
-	url := baseURL + authTokenURL
+	url := connection.Host + authTokenURL
 
 	// build jsonBody
 	requestBody := map[string]string{
@@ -124,7 +133,7 @@ func (connection *Connection) SetupNewBankAccount(accessToken string, bankCode s
 	accessToken = "Bearer " + accessToken
 
 	// build url
-	url := baseURL + restAccountsURL
+	url := connection.Host + restAccountsURL
 
 	// build jsonBody
 	requestBody := map[string]interface{}{
@@ -149,7 +158,7 @@ func (connection *Connection) DeleteUser(accessToken string) ([]byte, error) {
 	accessToken = "Bearer " + accessToken
 
 	// build url
-	url := baseURL + restUserURL
+	url := connection.Host + restUserURL
 
 	// build request
 	request, err := http.NewRequest("DELETE", url, nil)
@@ -166,7 +175,7 @@ func (connection *Connection) CreateNewSynchronizationTask(accessToken string, t
 	accessToken = "Bearer " + accessToken
 
 	// build url
-	url := baseURL + restSyncURL
+	url := connection.Host + restSyncURL
 
 	// build jsonBody
 	requestBody := map[string]interface{}{
@@ -189,7 +198,7 @@ func (connection *Connection) RetrieveTransactionsOfAllAccounts(accessToken stri
 	accessToken = "Bearer " + accessToken
 
 	// build url
-	url := baseURL + restTransactionsURL
+	url := connection.Host + restTransactionsURL
 
 	// build request
 	request, err := http.NewRequest("GET", url, nil)
