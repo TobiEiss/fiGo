@@ -17,9 +17,9 @@ func RetrieveAllBankAccounts(connection fiGo.IConnection, accessToken string) ([
 
 	// try to get accessToken
 	jsonParsed, err := gabs.ParseJSON(answerByte)
-	transactions, ok := jsonParsed.Path("accounts").Data().([]map[string]interface{})
+	accounts, ok := jsonParsed.Path("accounts").Data().([]map[string]interface{})
 	if !ok {
-		return transactions, err
+		return accounts, err
 	}
-	return transactions, nil
+	return accounts, nil
 }
