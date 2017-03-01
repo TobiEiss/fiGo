@@ -55,6 +55,10 @@ type IConnection interface {
 	// -> country is something like "de" (for germany)
 	SetupNewBankAccount(accessToken string, bankCode string, country string, credentials []string) ([]byte, error)
 
+	// http://docs.figo.io/#retrieve-all-bank-accounts
+	// Retrieves all bankAccounts for an user
+	RetrieveAllBankAccounts(accessToken string) ([]byte, error)
+
 	// http://docs.figo.io/#poll-task-state
 	// request a task
 	// -> you need a taskToken. You will get this from SetupNewBankAccount
@@ -194,6 +198,23 @@ func (connection *Connection) RetrieveTransactionsOfAllAccounts(accessToken stri
 
 	// build url
 	url := connection.Host + restTransactionsURL
+
+	// build request
+	request, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return buildRequestAndCheckResponse(request, accessToken)
+}
+
+// RetrieveAllBankAccounts retrieves all bankAccounts for an user
+func (connection *Connection) RetrieveAllBankAccounts(accessToken string) ([]byte, error) {
+	// build accessToken
+	accessToken = "Bearer " + accessToken
+
+	// build url
+	url := connection.Host + restAccountsURL
 
 	// build request
 	request, err := http.NewRequest("GET", url, nil)
