@@ -4,9 +4,9 @@ THIS IST WIP!!!
 
 ```
 [x] createUser
-[ ] deleteUser
+[x] deleteUser
 [x] loginUser
 [x] addBankCredentials
-[ ] getTransactions
+[x] getTransactions
 [x] request task state
 ```
