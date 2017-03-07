@@ -6,8 +6,8 @@ import (
 )
 
 // RetrieveAllTransactions retrieves all transacions of all accounts
-func RetrieveAllTransactions(connection fiGo.IConnection, accessToken string) ([]map[string]interface{}, error) {
-	var transactions []map[string]interface{}
+func RetrieveAllTransactions(connection fiGo.IConnection, accessToken string) ([]interface{}, error) {
+	var transactions []interface{}
 
 	// get transactions
 	answerByte, err := connection.RetrieveTransactionsOfAllAccounts(accessToken)
@@ -17,7 +17,7 @@ func RetrieveAllTransactions(connection fiGo.IConnection, accessToken string) ([
 
 	// try to get accessToken
 	jsonParsed, err := gabs.ParseJSON(answerByte)
-	transactions, ok := jsonParsed.Path("transactions").Data().([]map[string]interface{})
+	transactions, ok := jsonParsed.Search("transactions").Data().([]interface{})
 	if !ok {
 		return transactions, err
 	}

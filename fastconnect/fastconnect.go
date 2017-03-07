@@ -9,16 +9,16 @@ var (
 
 // FigoUser represent a user
 type FigoUser struct {
-	Email    string
-	Username string
-	Password string
+	Email    string `json:"email,omitempty" bson:"email,omitempty"`
+	Username string `json:"username,omitempty" bson:"emusernameail,omitempty"`
+	Password string `json:"password,omitempty" bson:"password,omitempty"`
 }
 
 // BankCredentials represent the BankCredentials
 type BankCredentials struct {
-	BankCode    string
-	Country     string
-	Credentials []string
+	BankCode    string   `json:"bankCode,omitempty" bson:"bankCode,omitempty"`
+	Country     string   `json:"country,omitempty" bson:"country,omitempty"`
+	Credentials []string `json:"credentials,omitempty" bson:"credentials,omitempty"`
 }
 
 type Task struct {
