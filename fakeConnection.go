@@ -109,6 +109,11 @@ func (fakeConnection *FakeConnection) RetrieveAllBankAccounts(accessToken string
 	return nil, nil
 }
 
+// RetrieveSpecificTransaction TODO
+func (fakeConnection *FakeConnection) RetrieveSpecificTransaction(accessToken string, transactionID string) ([]byte, error) {
+	return nil, nil
+}
+
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 func randStringRunes(n int) string {

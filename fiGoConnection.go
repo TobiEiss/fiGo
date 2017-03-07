@@ -67,6 +67,10 @@ type IConnection interface {
 	// http://docs.figo.io/#retrieve-transactions-of-one-or-all-account
 	// Retrieves all Transactions
 	RetrieveTransactionsOfAllAccounts(accessToken string) ([]byte, error)
+
+	// http://docs.figo.io/#retrieve-a-transaction
+	// Retrieves a specific Transaction
+	RetrieveSpecificTransaction(accessToken string, transactionID string) ([]byte, error)
 }
 
 // Connection represent a connection to figo
@@ -198,6 +202,23 @@ func (connection *Connection) RetrieveTransactionsOfAllAccounts(accessToken stri
 
 	// build url
 	url := connection.Host + restTransactionsURL
+
+	// build request
+	request, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return buildRequestAndCheckResponse(request, accessToken)
+}
+
+// RetrieveSpecificTransaction with accessToken from login-session
+func (connection *Connection) RetrieveSpecificTransaction(accessToken string, transactionID string) ([]byte, error) {
+	// build accessToken
+	accessToken = "Bearer " + accessToken
+
+	// build url
+	url := connection.Host + restTransactionsURL + "/" + transactionID
 
 	// build request
 	request, err := http.NewRequest("GET", url, nil)
