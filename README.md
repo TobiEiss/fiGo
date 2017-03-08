@@ -89,3 +89,10 @@ The `jsonAnswer` contains a `task_token`. You need this to sync the figo-account
 ```json
 {"task_token": "abcdefghijklmnopqrstuvwxyz"}
 ```
+
+### Delete a user
+
+You want to delete a user? - No problem. Just call code below:
+```golang
+jsonAnswer, err := connection.DeleteUser(accessToken)
+```
