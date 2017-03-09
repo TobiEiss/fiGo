@@ -5,10 +5,13 @@
 This project is a golang-driver for [figo](http://www.figo.io).  
 If you want to use this, you need a clientID and a clientSecret. You will get this from figo.
 
+You miss something here? - Please let me know!
+
 Currently implemented:
 * [create a user](#create-a-user) ([figo-API-reference](http://docs.figo.io/#create-new-figo-user))
 * [credential login](#credentials-login) ([figo-API-reference](http://docs.figo.io/#credential-login))
 * [setup new bank account](#setup-new-bank-account) ([figo-API-reference](http://docs.figo.io/#setup-new-bank-account))
+* [delete a user](#delete-a-user) ([figo-API-reference](http://docs.figo.io/#delete-a-user))
 
 ## Getting started
 
