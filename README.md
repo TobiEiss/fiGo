@@ -115,3 +115,71 @@ answerByte, err := connection.RetrieveAllBankAccounts(accessToken)
 ```
 
 You will get back the transactions and account-informations as JSON. Use gabs and Json.Unmarshal to put this directly in a model.
+
+## fastconnect
+
+FiGo-fastconnect is a way to interact in a faster way with figo. All the user-/ account-/ .. models are ready. Also all the API-calls.
+
+### Getting started with fastconnect
+
+```golang
+// First, let's create some struct-objects for a figoUser and bankCredentials.
+figoUser := fastconnect.FigoUser{
+    Email:    "email@example.com",
+    Username: "username",
+    Password: "mySecretPassword",
+}
+bankCredentials := fastconnect.BankCredentials{
+    BankCode:    "90090042",
+    Country:     "de",
+    Credentials: []string{"demo", "demo"},
+}
+
+// Create a new connection to figo
+figoConnection := fiGo.NewFigoConnection("clientID", "clientSecret")
+
+// Now create the user on figo-side
+recoveryPassword, err := fastconnect.CreateUser(figo.Connection, figoUser)
+if recoveryPassword == "" || err != nil {
+    // TODO: handle error!
+}
+
+// Login the new created user to get an accessToken
+accessToken, err = fastconnect.LoginUser(figo.Connection, figoUser)
+if accessToken == "" || err != nil {
+    // Can't create figoUser. TODO: handle this!
+}
+
+// Add BankCredentials to the figo-account on figo-side
+taskToken, err := fastconnect.SetupNewBankAccount(figo.Connection, accessToken, bankCredentials)
+if err != nil || taskToken == "" {
+    // Error while setup new bankAccount. TODO handle error!
+}
+
+// We need to check the snychronize-Task
+task, err := fastconnect.RequestTask(figo.Connection, accessToken, taskToken)
+if err != nil {
+    // Should i say something? - Yeah..TODO: handle error!
+}
+
+// NOTICE! Check now the task, if everything is ready synchronized. If not, ask again.
+
+// Now, you can retrieve all transations
+transactionInterfaces, err := fastconnect.RetrieveAllTransactions(figo.Connection, accessToken)
+if err != nil || transactionInterfaces == nil {
+    // TODO: handle your error here!
+}
+
+// convert now to a model. TODO: implement a "Transaction" model with "json"-tags.
+transactions := make(Transaction, 0)
+for _, transactionInterface := range transactionInterfaces {
+    transactionByte, err := json.Marshal(transactionInterface)
+    if err == nil {
+        transaction := Transaction{}
+        json.Unmarshal(transactionByte, &transaction)
+        transactions = append(transactions, transaction)
+    }
+}
+```
+
+Checkout the [fastconnect](https://github.com/TobiEiss/fiGo/fastconnect/) package for more stuff!
