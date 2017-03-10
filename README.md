@@ -12,6 +12,7 @@ Currently implemented:
 * [credential login](#credentials-login) ([figo-API-reference](http://docs.figo.io/#credential-login))
 * [setup new bank account](#setup-new-bank-account) ([figo-API-reference](http://docs.figo.io/#setup-new-bank-account))
 * [delete a user](#delete-a-user) ([figo-API-reference](http://docs.figo.io/#delete-a-user))
+* [retrieve transactions and account-informations](#retrieve-transactions-and-account-informations)
 
 ## Getting started
 
@@ -100,8 +101,17 @@ You want to delete a user? - No problem. Just call code below:
 jsonAnswer, err := connection.DeleteUser(accessToken)
 ```
 
-### Retrieve Transactions
+### Retrieve transactions and account-informations
 
 To retrieve transactions use the access-Token from [credential login](#credentials-login):
 ```golang
+answerByte, err := connection.RetrieveTransactionsOfAllAccounts(accessToken)
 ```
+
+For Account-Information:
+
+```golang
+answerByte, err := connection.RetrieveAllBankAccounts(accessToken)
+```
+
+You will get back the transactions and account-informations as JSON. Use gabs and Json.Unmarshal to put this directly in a model.
