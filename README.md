@@ -24,6 +24,8 @@ Dependencies:
 
 ## Usage
 
+The following is about how to connect to fiGo with the plain-lightweight-slick-fiGo library. If all this is too complicated, use [fastconnect](#fastconnect)!
+
 First create a new connection:
 ```golang
 // create a new fiGo-Connection
@@ -81,6 +83,8 @@ You will get all relevant user data like this:
 Tip: Use [gabs](https://github.com/Jeffail/gabs) to get specific fields.  
 Notice: Keep the `access_token` for other user-activities.
 
+Crappy? - use [fastconnect](#fastconnect)!
+
 ### Setup new bank account
 
 Add a bankAccount to an existing figo-account
@@ -100,6 +104,8 @@ You want to delete a user? - No problem. Just call code below:
 ```golang
 jsonAnswer, err := connection.DeleteUser(accessToken)
 ```
+
+Hint: Are you confused? Take a look to [fastconnect](#fastconnect)!
 
 ### Retrieve transactions and account-informations
 
