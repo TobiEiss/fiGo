@@ -99,3 +99,9 @@ You want to delete a user? - No problem. Just call code below:
 ```golang
 jsonAnswer, err := connection.DeleteUser(accessToken)
 ```
+
+### Retrieve Transactions
+
+To retrieve transactions use the access-Token from [credential login](#credentials-login):
+```golang
+```
