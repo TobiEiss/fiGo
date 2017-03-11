@@ -188,4 +188,4 @@ for _, transactionInterface := range transactionInterfaces {
 }
 ```
 
-Checkout the [fastconnect](https://github.com/TobiEiss/fiGo/fastconnect/) package for more stuff!
+Checkout the [fastconnect](https://github.com/TobiEiss/fiGo/tree/master/fastconnect) package for more stuff!
