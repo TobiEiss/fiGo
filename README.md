@@ -12,7 +12,10 @@ Currently implemented:
 * [credential login](#credentials-login) ([figo-API-reference](http://docs.figo.io/#credential-login))
 * [setup new bank account](#setup-new-bank-account) ([figo-API-reference](http://docs.figo.io/#setup-new-bank-account))
 * [delete a user](#delete-a-user) ([figo-API-reference](http://docs.figo.io/#delete-a-user))
-* [retrieve transactions and account-informations](#retrieve-transactions-and-account-informations)
+* [retrieve transactions and account-informations](#retrieve-transactions-and-account-informations) ([figo-API-reference](http://docs.figo.io/#retrieve-transactions-of-one-or-all-account))
+* [retrieve all bankAccounts](#retrieve-all-bankaccounts) ([figo-API-reference](http://docs.figo.io/#retrieve-all-bank-accounts))
+* retrieve specific transaction
+* request for task
 
 ## Getting started
 
@@ -121,6 +124,14 @@ answerByte, err := connection.RetrieveAllBankAccounts(accessToken)
 ```
 
 You will get back the transactions and account-informations as JSON. Use gabs and Json.Unmarshal to put this directly in a model.
+
+### Retrieve all bankAccounts
+
+Get all bankAccounts for a figo-account:
+
+```golang
+answerByte, err := connection.RetrieveAllBankAccounts(accessToken)
+```
 
 ## fastconnect
 
