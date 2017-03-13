@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"io/ioutil"
-	"log"
 	"net/http"
 
 	"github.com/Jeffail/gabs"
@@ -264,8 +263,6 @@ func buildRequestAndCheckResponse(request *http.Request, authString string) ([]b
 	if err != nil {
 		return nil, err
 	}
-
-	log.Println(string(body))
 
 	// check response for errors
 	if string(body) != "" {
