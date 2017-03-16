@@ -60,7 +60,7 @@ type IConnection interface {
 
 	// http://docs.figo.io/#delete-bank-account
 	// Removes a bankAccount from figo-account
-	RemoveBankAccount(accessToken string, bankAccountID string)
+	RemoveBankAccount(accessToken string, bankAccountID string) ([]byte, error)
 
 	// http://docs.figo.io/#poll-task-state
 	// request a task
@@ -165,20 +165,20 @@ func (connection *Connection) SetupNewBankAccount(accessToken string, bankCode s
 }
 
 // RemoveBankAccount removes a bank account
-func (connection *Connection) RemoveBankAccount(accessToken string, bankAccountID string) {
+func (connection *Connection) RemoveBankAccount(accessToken string, bankAccountID string) ([]byte, error) {
 	// build accessToken
 	accessToken = "Bearer " + accessToken
 
 	// build url
-	url := connection.Host + restAccountsURL
+	url := connection.Host + restAccountsURL + "/" + bankAccountID
 
 	// build request
 	request, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
-		return
+		return nil, err
 	}
 
-	buildRequestAndCheckResponse(request, accessToken)
+	return buildRequestAndCheckResponse(request, accessToken)
 }
 
 // DeleteUser deletes an existing user

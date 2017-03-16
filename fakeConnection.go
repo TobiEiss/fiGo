@@ -110,7 +110,8 @@ func (fakeConnection *FakeConnection) RetrieveAllBankAccounts(accessToken string
 }
 
 // RemoveBankAccount removes a bank account TODO
-func (fakeConnection *FakeConnection) RemoveBankAccount(accessToken string, bankAccountID string) {
+func (fakeConnection *FakeConnection) RemoveBankAccount(accessToken string, bankAccountID string) ([]byte, error) {
+	return nil, nil
 }
 
 // RetrieveSpecificTransaction TODO
