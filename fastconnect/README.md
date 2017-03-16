@@ -8,6 +8,7 @@ THIS IST WIP!!!
 [x] loginUser
 [x] addBankCredentials
 [x] getAllBankAccounts
+[x] removeBankAccount from figo-Account
 [x] getTransactions
 [x] request task state
 ```
