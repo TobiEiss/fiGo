@@ -156,25 +156,25 @@ bankCredentials := fastconnect.BankCredentials{
 figoConnection := fiGo.NewFigoConnection("clientID", "clientSecret")
 
 // Now create the user on figo-side
-recoveryPassword, err := fastconnect.CreateUser(figo.Connection, figoUser)
+recoveryPassword, err := fastconnect.CreateUser(figoConnection, figoUser)
 if recoveryPassword == "" || err != nil {
     // TODO: handle error!
 }
 
 // Login the new created user to get an accessToken
-accessToken, err = fastconnect.LoginUser(figo.Connection, figoUser)
+accessToken, err = fastconnect.LoginUser(figoConnection, figoUser)
 if accessToken == "" || err != nil {
     // Can't create figoUser. TODO: handle this!
 }
 
 // Add BankCredentials to the figo-account on figo-side
-taskToken, err := fastconnect.SetupNewBankAccount(figo.Connection, accessToken, bankCredentials)
+taskToken, err := fastconnect.SetupNewBankAccount(figoConnection, accessToken, bankCredentials)
 if err != nil || taskToken == "" {
     // Error while setup new bankAccount. TODO handle error!
 }
 
 // We need to check the snychronize-Task
-task, err := fastconnect.RequestTask(figo.Connection, accessToken, taskToken)
+task, err := fastconnect.RequestTask(figoConnection, accessToken, taskToken)
 if err != nil {
     // Should i say something? - Yeah..TODO: handle error!
 }
@@ -182,7 +182,7 @@ if err != nil {
 // NOTICE! Check now the task, if everything is ready synchronized. If not, ask again.
 
 // Now, you can retrieve all transations
-transactionInterfaces, err := fastconnect.RetrieveAllTransactions(figo.Connection, accessToken)
+transactionInterfaces, err := fastconnect.RetrieveAllTransactions(figoConnection, accessToken)
 if err != nil || transactionInterfaces == nil {
     // TODO: handle your error here!
 }

@@ -1,3 +1,4 @@
 .vscode/
 .info
 debug*
+fastconnect/fastconnect_intern_test.go
