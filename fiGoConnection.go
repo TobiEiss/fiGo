@@ -20,6 +20,7 @@ const (
 	restTransactionsURL = "/rest/transactions"
 	restSyncURL         = "/rest/sync"
 	taskProgressURL     = "/task/progress"
+	catalog             = "/catalog"
 )
 
 var (
@@ -74,6 +75,10 @@ type IConnection interface {
 	// http://docs.figo.io/#retrieve-a-transaction
 	// Retrieves a specific Transaction
 	RetrieveSpecificTransaction(accessToken string, transactionID string) ([]byte, error)
+
+	// http://docs.figo.io/#tag/Catalog
+	// Read individual Catalog Entry
+	ReadIndividualCatalogEntry(accessToken string, catalogCategory string, countryCode string, serviceID string) ([]byte, error)
 }
 
 // Connection represent a connection to figo
@@ -256,6 +261,23 @@ func (connection *Connection) RetrieveAllBankAccounts(accessToken string) ([]byt
 
 	// build url
 	url := connection.Host + restAccountsURL
+
+	// build request
+	request, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return buildRequestAndCheckResponse(request, accessToken)
+}
+
+// ReadIndividualCatalogEntry gets all infos for a specific catalog entry.
+// catalogCategory is "banks" or "services"
+// countryCode is "de" or "at"
+// serviceID is something like BLZ
+func (connection *Connection) ReadIndividualCatalogEntry(accessToken string, catalogCategory string, countryCode string, serviceID string) ([]byte, error) {
+	// build url
+	url := connection.Host + catalog + "/" + catalogCategory + "/" + serviceID
 
 	// build request
 	request, err := http.NewRequest("GET", url, nil)
