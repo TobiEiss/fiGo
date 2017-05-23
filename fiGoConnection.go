@@ -276,6 +276,9 @@ func (connection *Connection) RetrieveAllBankAccounts(accessToken string) ([]byt
 // countryCode is "de" or "at"
 // serviceID is something like BLZ
 func (connection *Connection) ReadIndividualCatalogEntry(accessToken string, catalogCategory string, countryCode string, serviceID string) ([]byte, error) {
+	// build accessToken
+	accessToken = "Bearer " + accessToken
+
 	// build url
 	url := connection.Host + catalog + "/" + catalogCategory + "/" + serviceID
 
