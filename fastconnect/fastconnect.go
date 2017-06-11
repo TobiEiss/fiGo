@@ -10,7 +10,7 @@ var (
 // FigoUser represent a user
 type FigoUser struct {
 	Email    string `json:"email,omitempty" bson:"email,omitempty"`
-	Username string `json:"username,omitempty" bson:"emusernameail,omitempty"`
+	Username string `json:"username,omitempty" bson:"username,omitempty"`
 	Password string `json:"password,omitempty" bson:"password,omitempty"`
 }
 
