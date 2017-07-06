@@ -70,7 +70,7 @@ type IConnection interface {
 
 	// http://docs.figo.io/#retrieve-transactions-of-one-or-all-account
 	// Retrieves all Transactions
-	RetrieveTransactionsOfAllAccounts(accessToken string) ([]byte, error)
+	RetrieveTransactionsOfAllAccounts(accessToken string, options ...TransactionOption) ([]byte, error)
 
 	// http://docs.figo.io/#retrieve-a-transaction
 	// Retrieves a specific Transaction
@@ -220,8 +220,22 @@ func (connection *Connection) RequestForTask(accessToken string, taskToken strin
 	return buildRequestAndCheckResponse(request, accessToken)
 }
 
+// TransactionOption are options for transaction-calls
+type TransactionOption struct {
+	Key   TransactionOptionKey
+	Value string
+}
+
+// TransactionOptionKey are the type for allowed keys
+type TransactionOptionKey string
+
+var (
+	// Cent if true, the amount of the transactions will be shown in cents.
+	Cent TransactionOptionKey = "cents"
+)
+
 // RetrieveTransactionsOfAllAccounts with accessToken from login-session
-func (connection *Connection) RetrieveTransactionsOfAllAccounts(accessToken string) ([]byte, error) {
+func (connection *Connection) RetrieveTransactionsOfAllAccounts(accessToken string, options ...TransactionOption) ([]byte, error) {
 	// build accessToken
 	accessToken = "Bearer " + accessToken
 
@@ -232,6 +246,15 @@ func (connection *Connection) RetrieveTransactionsOfAllAccounts(accessToken stri
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
+	}
+
+	// if there are options, apply these
+	if len(options) > 0 {
+		q := request.URL.Query()
+		for _, option := range options {
+			q.Add(string(option.Key), option.Value)
+		}
+		request.URL.RawQuery = q.Encode()
 	}
 
 	return buildRequestAndCheckResponse(request, accessToken)

@@ -1,6 +1,8 @@
 package fastconnect
 
 import (
+	"log"
+
 	"github.com/Jeffail/gabs"
 	"github.com/TobiEiss/fiGo"
 )
@@ -13,6 +15,7 @@ func CreateUser(connection fiGo.IConnection, figoUser FigoUser) (string, error) 
 	// setup new figo-user
 	answerByte, err := connection.CreateUser(figoUser.Username, figoUser.Email, figoUser.Password)
 	if err != nil {
+		log.Println(string(answerByte))
 		return recoveryPassword, err
 	}
 

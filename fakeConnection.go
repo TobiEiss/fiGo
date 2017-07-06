@@ -100,7 +100,7 @@ func (fakeConnection *FakeConnection) RequestForTask(accessToken string, taskTok
 }
 
 // RetrieveTransactionsOfAllAccounts TODO
-func (fakeConnection *FakeConnection) RetrieveTransactionsOfAllAccounts(accessToken string) ([]byte, error) {
+func (fakeConnection *FakeConnection) RetrieveTransactionsOfAllAccounts(accessToken string, options ...TransactionOption) ([]byte, error) {
 	return nil, nil
 }
 
