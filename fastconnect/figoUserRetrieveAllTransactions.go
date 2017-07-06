@@ -6,11 +6,11 @@ import (
 )
 
 // RetrieveAllTransactions retrieves all transacions of all accounts
-func RetrieveAllTransactions(connection fiGo.IConnection, accessToken string) ([]interface{}, error) {
+func RetrieveAllTransactions(connection fiGo.IConnection, accessToken string, options ...fiGo.TransactionOption) ([]interface{}, error) {
 	var transactions []interface{}
 
 	// get transactions
-	answerByte, err := connection.RetrieveTransactionsOfAllAccounts(accessToken)
+	answerByte, err := connection.RetrieveTransactionsOfAllAccounts(accessToken, options...)
 	if err != nil {
 		return transactions, err
 	}
