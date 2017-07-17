@@ -12,15 +12,16 @@ import (
 )
 
 const (
-	defaultBaseURL      = "https://api.figo.me"
-	authUserURL         = "/auth/user"
-	authTokenURL        = "/auth/token"
-	restAccountsURL     = "/rest/accounts"
-	restUserURL         = "/rest/user"
-	restTransactionsURL = "/rest/transactions"
-	restSyncURL         = "/rest/sync"
-	taskProgressURL     = "/task/progress"
-	catalog             = "/catalog"
+	defaultBaseURL        = "https://api.figo.me"
+	authUserURL           = "/auth/user"
+	authTokenURL          = "/auth/token"
+	restAccountsURL       = "/rest/accounts"
+	restUserURL           = "/rest/user"
+	restTransactionsURL   = "/rest/transactions"
+	restStandingOrdersURL = "/rest/standing_orders"
+	restSyncURL           = "/rest/sync"
+	taskProgressURL       = "/task/progress"
+	catalog               = "/catalog"
 )
 
 var (
@@ -79,6 +80,10 @@ type IConnection interface {
 	// http://docs.figo.io/#tag/Catalog
 	// Read individual Catalog Entry
 	ReadIndividualCatalogEntry(accessToken string, catalogCategory string, countryCode string, serviceID string) ([]byte, error)
+
+	// http://docs.figo.io/#standing-orders-api-calls-read-standing-orders
+	// Read standing orders
+	ReadStandingOrder(accessToken string, options ...TransactionOption) ([]byte, error)
 }
 
 // Connection represent a connection to figo
@@ -241,6 +246,32 @@ func (connection *Connection) RetrieveTransactionsOfAllAccounts(accessToken stri
 
 	// build url
 	url := connection.Host + restTransactionsURL
+
+	// build request
+	request, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	// if there are options, apply these
+	if len(options) > 0 {
+		q := request.URL.Query()
+		for _, option := range options {
+			q.Add(string(option.Key), option.Value)
+		}
+		request.URL.RawQuery = q.Encode()
+	}
+
+	return buildRequestAndCheckResponse(request, accessToken)
+}
+
+// ReadStandingOrder all standing orders
+func (connection *Connection) ReadStandingOrder(accessToken string, options ...TransactionOption) ([]byte, error) {
+	// build accessToken
+	accessToken = "Bearer " + accessToken
+
+	// build url
+	url := connection.Host + restStandingOrdersURL
 
 	// build request
 	request, err := http.NewRequest("GET", url, nil)

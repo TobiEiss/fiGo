@@ -16,6 +16,7 @@ Currently implemented:
 * [retrieve all bankAccounts](#retrieve-all-bankaccounts) ([figo-API-reference](http://docs.figo.io/#retrieve-all-bank-accounts))
 * retrieve specific transaction
 * request for task
+* retrieve standing orders
 
 ## Getting started
 

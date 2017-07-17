@@ -124,6 +124,11 @@ func (fakeConnection *FakeConnection) ReadIndividualCatalogEntry(accessToken str
 	return nil, nil
 }
 
+// ReadStandingOrder TODO
+func (fakeConnection *FakeConnection) ReadStandingOrder(accessToken string, options ...TransactionOption) ([]byte, error) {
+	return nil, nil
+}
+
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 func randStringRunes(n int) string {
