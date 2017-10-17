@@ -126,14 +126,6 @@ answerByte, err := connection.RetrieveAllBankAccounts(accessToken)
 
 You will get back the transactions and account-informations as JSON. Use gabs and Json.Unmarshal to put this directly in a model.
 
-### Retrieve all bankAccounts
-
-Get all bankAccounts for a figo-account:
-
-```golang
-answerByte, err := connection.RetrieveAllBankAccounts(accessToken)
-```
-
 ## fastconnect
 
 FiGo-fastconnect is a way to interact in a faster way with figo. All the user-/ account-/ .. models are ready. Also all the API-calls.
@@ -189,7 +181,7 @@ if err != nil || transactionInterfaces == nil {
 }
 
 // convert now to a model. TODO: implement a "Transaction" model with "json"-tags.
-transactions := make(Transaction, 0)
+transactions := make([]Transaction, 0)
 for _, transactionInterface := range transactionInterfaces {
     transactionByte, err := json.Marshal(transactionInterface)
     if err == nil {
