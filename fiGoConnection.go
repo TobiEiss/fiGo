@@ -225,6 +225,39 @@ func (connection *Connection) RequestForTask(accessToken string, taskToken strin
 	return buildRequestAndCheckResponse(request, accessToken)
 }
 
+// SyncTask represents a synchronization task
+type SyncTask struct {
+	State                string   `json:"state"`
+	RedirectURI          string   `json:"redirect_uri"`
+	DisableNotifications bool     `json:"disable_notifications"`
+	IfNotSyncedSince     int      `json:"if_not_synced_since"`
+	AutoContinue         bool     `json:"auto_continue"`
+	AccountIds           []string `json:"account_ids"`
+	SyncTasks            []string `json:"sync_tasks"`
+}
+
+// CreateSynchronizationTask creates a new task to synchronize
+func (connection *Connection) CreateSynchronizationTask(accessToken string, syncTask SyncTask) ([]byte, error) {
+	// build accessToken
+	accessToken = "Bearer " + accessToken
+
+	// build url
+	url := connection.Host + restSyncURL
+
+	marshaledSyncTask, err := json.Marshal(&syncTask)
+	if err != nil {
+		return nil, err
+	}
+
+	// build request
+	request, err := http.NewRequest("POST", url, bytes.NewBuffer(marshaledSyncTask))
+	if err != nil {
+		return nil, err
+	}
+
+	return buildRequestAndCheckResponse(request, accessToken)
+}
+
 // TransactionOption are options for transaction-calls
 type TransactionOption struct {
 	Key   TransactionOptionKey
