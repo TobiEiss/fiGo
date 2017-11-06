@@ -341,6 +341,23 @@ func (connection *Connection) RetrieveSpecificTransaction(accessToken string, tr
 	return buildRequestAndCheckResponse(request, accessToken)
 }
 
+// RetrieveAllBankAccounts retrieves specific bankAccounts for an user
+func (connection *Connection) RetrieveSpecificBankAccounts(accessToken, accountID string) ([]byte, error) {
+	// build accessToken
+	accessToken = "Bearer " + accessToken
+
+	// build url
+	url := connection.Host + restAccountsURL + "/" + accountID
+
+	// build request
+	request, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return buildRequestAndCheckResponse(request, accessToken)
+}
+
 // RetrieveAllBankAccounts retrieves all bankAccounts for an user
 func (connection *Connection) RetrieveAllBankAccounts(accessToken string) ([]byte, error) {
 	// build accessToken
