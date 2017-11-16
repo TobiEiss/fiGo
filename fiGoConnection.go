@@ -74,6 +74,9 @@ type IConnection interface {
 	// Retrieves all Transactions
 	RetrieveTransactionsOfAllAccounts(accessToken string, options ...TransactionOption) ([]byte, error)
 
+	// Retrieves all Transactions of a single account
+	RetrieveTransactionsSingleAccount(accessToken, accountid string, options ...fiGo.TransactionOption)
+
 	// http://docs.figo.io/#retrieve-a-transaction
 	// Retrieves a specific Transaction
 	RetrieveSpecificTransaction(accessToken string, transactionID string) ([]byte, error)
@@ -325,7 +328,7 @@ func (connection *Connection) ReadStandingOrder(accessToken string, options ...T
 	return buildRequestAndCheckResponse(request, accessToken)
 }
 
-func (connection *Connection) RetrieveTransactionAccount(accessToken, accountid string, options ...fiGo.TransactionOption) ([]byte, error) {
+func (connection *Connection) RetrieveTransactionsSingleAccount(accessToken, accountid string, options ...fiGo.TransactionOption) ([]byte, error) {
 	// build accessToken
 	accessToken = "Bearer " + accessToken
 
