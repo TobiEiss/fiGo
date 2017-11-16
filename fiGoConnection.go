@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/Jeffail/gabs"
+	"github.com/TobiEiss/fiGo"
 )
 
 const (
@@ -305,6 +306,31 @@ func (connection *Connection) ReadStandingOrder(accessToken string, options ...T
 
 	// build url
 	url := connection.Host + restStandingOrdersURL
+
+	// build request
+	request, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	// if there are options, apply these
+	if len(options) > 0 {
+		q := request.URL.Query()
+		for _, option := range options {
+			q.Add(string(option.Key), option.Value)
+		}
+		request.URL.RawQuery = q.Encode()
+	}
+
+	return buildRequestAndCheckResponse(request, accessToken)
+}
+
+func (connection *Connection) RetrieveTransactionAccount(accessToken, accountid string, options ...fiGo.TransactionOption) ([]byte, error) {
+	// build accessToken
+	accessToken = "Bearer " + accessToken
+
+	// build url
+	url := connection.Host + restAccountsURL + "/" + accountid + "/transactions"
 
 	// build request
 	request, err := http.NewRequest("GET", url, nil)
