@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/Jeffail/gabs"
+	"github.com/TobiEiss/fiGo"
 )
 
 const (
@@ -72,6 +73,9 @@ type IConnection interface {
 	// http://docs.figo.io/#retrieve-transactions-of-one-or-all-account
 	// Retrieves all Transactions
 	RetrieveTransactionsOfAllAccounts(accessToken string, options ...TransactionOption) ([]byte, error)
+
+	// Retrieves all Transactions of a single account
+	RetrieveTransactionsSingleAccount(accessToken, accountid string, options ...fiGo.TransactionOption)
 
 	// http://docs.figo.io/#retrieve-a-transaction
 	// Retrieves a specific Transaction
@@ -305,6 +309,31 @@ func (connection *Connection) ReadStandingOrder(accessToken string, options ...T
 
 	// build url
 	url := connection.Host + restStandingOrdersURL
+
+	// build request
+	request, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	// if there are options, apply these
+	if len(options) > 0 {
+		q := request.URL.Query()
+		for _, option := range options {
+			q.Add(string(option.Key), option.Value)
+		}
+		request.URL.RawQuery = q.Encode()
+	}
+
+	return buildRequestAndCheckResponse(request, accessToken)
+}
+
+func (connection *Connection) RetrieveTransactionsSingleAccount(accessToken, accountid string, options ...fiGo.TransactionOption) ([]byte, error) {
+	// build accessToken
+	accessToken = "Bearer " + accessToken
+
+	// build url
+	url := connection.Host + restAccountsURL + "/" + accountid + "/transactions"
 
 	// build request
 	request, err := http.NewRequest("GET", url, nil)
