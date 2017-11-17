@@ -74,7 +74,7 @@ type IConnection interface {
 	RetrieveTransactionsOfAllAccounts(accessToken string, options ...TransactionOption) ([]byte, error)
 
 	// Retrieves all Transactions of a single account
-	RetrieveTransactionsSingleAccount(accessToken, accountid string, options ...TransactionOption)
+	RetrieveTransactionsSingleAccount(accessToken, accountid string, options ...TransactionOption) ([]byte, error)
 
 	// http://docs.figo.io/#retrieve-a-transaction
 	// Retrieves a specific Transaction
