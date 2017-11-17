@@ -9,7 +9,6 @@ import (
 	"net/http"
 
 	"github.com/Jeffail/gabs"
-	"github.com/TobiEiss/fiGo"
 )
 
 const (
@@ -75,7 +74,7 @@ type IConnection interface {
 	RetrieveTransactionsOfAllAccounts(accessToken string, options ...TransactionOption) ([]byte, error)
 
 	// Retrieves all Transactions of a single account
-	RetrieveTransactionsSingleAccount(accessToken, accountid string, options ...fiGo.TransactionOption)
+	RetrieveTransactionsSingleAccount(accessToken, accountid string, options ...TransactionOption)
 
 	// http://docs.figo.io/#retrieve-a-transaction
 	// Retrieves a specific Transaction
@@ -328,7 +327,7 @@ func (connection *Connection) ReadStandingOrder(accessToken string, options ...T
 	return buildRequestAndCheckResponse(request, accessToken)
 }
 
-func (connection *Connection) RetrieveTransactionsSingleAccount(accessToken, accountid string, options ...fiGo.TransactionOption) ([]byte, error) {
+func (connection *Connection) RetrieveTransactionsSingleAccount(accessToken, accountid string, options ...TransactionOption) ([]byte, error) {
 	// build accessToken
 	accessToken = "Bearer " + accessToken
 
