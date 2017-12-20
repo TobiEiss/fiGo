@@ -24,7 +24,7 @@ type BankCredentials struct {
 type Task struct {
 	AccountID            string `json:"account_id,omitempty"`
 	IsEnded              bool   `json:"is_ended,omitempty"`
-	IsErrpneous          bool   `json:"is_erroneous,omitempty"`
+	IsErroneous          bool   `json:"is_erroneous,omitempty"`
 	IsWaitingForPin      bool   `json:"is_waiting_for_pin,omitempty"`
 	IsWaitingForResponse bool   `json:"is_waiting_for_response,omitempty"`
 	Message              string `json:"message,omitempty"`
