@@ -386,7 +386,7 @@ func (connection *Connection) RetrieveSpecificBankAccounts(accessToken, accountI
 	// add cents query param
 	if cents {
 		q := request.URL.Query()
-    		q.Add("cents", cents)
+    		q.Add("cents", "true")
     		request.URL.RawQuery = q.Encode()
 	}
 
@@ -410,7 +410,7 @@ func (connection *Connection) RetrieveAllBankAccounts(accessToken string, cents 
 	// add cents query param
 	if cents {
 		q := request.URL.Query()
-    		q.Add("cents", cents)
+    		q.Add("cents", "true")
     		request.URL.RawQuery = q.Encode()
 	}
 
