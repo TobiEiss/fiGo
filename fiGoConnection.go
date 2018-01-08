@@ -370,7 +370,7 @@ func (connection *Connection) RetrieveSpecificTransaction(accessToken string, tr
 }
 
 // RetrieveAllBankAccounts retrieves specific bankAccounts for an user
-func (connection *Connection) RetrieveSpecificBankAccounts(accessToken, accountID string) ([]byte, error) {
+func (connection *Connection) RetrieveSpecificBankAccounts(accessToken, accountID string, cents bool) ([]byte, error) {
 	// build accessToken
 	accessToken = "Bearer " + accessToken
 
@@ -382,12 +382,19 @@ func (connection *Connection) RetrieveSpecificBankAccounts(accessToken, accountI
 	if err != nil {
 		return nil, err
 	}
+	
+	// add cents query param
+	if cents {
+		q := request.URL.Query()
+    		q.Add("cents", cents)
+    		request.URL.RawQuery = q.Encode()
+	}
 
 	return buildRequestAndCheckResponse(request, accessToken)
 }
 
 // RetrieveAllBankAccounts retrieves all bankAccounts for an user
-func (connection *Connection) RetrieveAllBankAccounts(accessToken string) ([]byte, error) {
+func (connection *Connection) RetrieveAllBankAccounts(accessToken string, cents bool) ([]byte, error) {
 	// build accessToken
 	accessToken = "Bearer " + accessToken
 
@@ -398,6 +405,13 @@ func (connection *Connection) RetrieveAllBankAccounts(accessToken string) ([]byt
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
+	}
+	
+	// add cents query param
+	if cents {
+		q := request.URL.Query()
+    		q.Add("cents", cents)
+    		request.URL.RawQuery = q.Encode()
 	}
 
 	return buildRequestAndCheckResponse(request, accessToken)
