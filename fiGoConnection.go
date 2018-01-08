@@ -58,7 +58,7 @@ type IConnection interface {
 
 	// http://docs.figo.io/#retrieve-all-bank-accounts
 	// Retrieves all bankAccounts for an user
-	RetrieveAllBankAccounts(accessToken string) ([]byte, error)
+	RetrieveAllBankAccounts(accessToken string, cents bool) ([]byte, error)
 
 	// http://docs.figo.io/#delete-bank-account
 	// Removes a bankAccount from figo-account
@@ -382,12 +382,12 @@ func (connection *Connection) RetrieveSpecificBankAccounts(accessToken, accountI
 	if err != nil {
 		return nil, err
 	}
-	
+
 	// add cents query param
 	if cents {
 		q := request.URL.Query()
-    		q.Add("cents", "true")
-    		request.URL.RawQuery = q.Encode()
+		q.Add("cents", "true")
+		request.URL.RawQuery = q.Encode()
 	}
 
 	return buildRequestAndCheckResponse(request, accessToken)
@@ -406,12 +406,12 @@ func (connection *Connection) RetrieveAllBankAccounts(accessToken string, cents 
 	if err != nil {
 		return nil, err
 	}
-	
+
 	// add cents query param
 	if cents {
 		q := request.URL.Query()
-    		q.Add("cents", "true")
-    		request.URL.RawQuery = q.Encode()
+		q.Add("cents", "true")
+		request.URL.RawQuery = q.Encode()
 	}
 
 	return buildRequestAndCheckResponse(request, accessToken)

@@ -8,9 +8,9 @@ import (
 )
 
 // RetrieveAllBankAccounts retrieves all bankAccounts
-func RetrieveAllBankAccounts(connection fiGo.IConnection, accessToken string) (interface{}, error) {
+func RetrieveAllBankAccounts(connection fiGo.IConnection, accessToken string, cents bool) (interface{}, error) {
 	// get accounts
-	answerByte, err := connection.RetrieveAllBankAccounts(accessToken)
+	answerByte, err := connection.RetrieveAllBankAccounts(accessToken, cents)
 	if err != nil {
 		return nil, err
 	}
