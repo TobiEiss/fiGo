@@ -67,7 +67,7 @@ type IConnection interface {
 	// http://docs.figo.io/#poll-task-state
 	// request a task
 	// -> you need a taskToken. You will get this from SetupNewBankAccount
-	RequestForTask(accessToken string, taskToken string) ([]byte, error)
+	RequestForTask(accessToken string, taskToken string, pin string) ([]byte, error)
 
 	// http://docs.figo.io/#retrieve-transactions-of-one-or-all-account
 	// Retrieves all Transactions

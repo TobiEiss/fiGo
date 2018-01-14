@@ -7,11 +7,11 @@ import (
 )
 
 // RequestTask ask for task
-func RequestTask(connection fiGo.IConnection, accessToken string, taskToken string) (Task, error) {
+func RequestTask(connection fiGo.IConnection, accessToken, taskToken, pin string) (Task, error) {
 	var task Task
 
 	// try to get state of task
-	answerByte, err := connection.RequestForTask(accessToken, taskToken)
+	answerByte, err := connection.RequestForTask(accessToken, taskToken, pin)
 	if err != nil {
 		return task, err
 	}
