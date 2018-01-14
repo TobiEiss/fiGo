@@ -165,6 +165,7 @@ func (connection *Connection) SetupNewBankAccount(accessToken string, bankCode s
 		"bank_code":   bankCode,
 		"country":     country,
 		"credentials": credentials,
+		"save_pin":    false,
 	}
 	jsonBody, err := json.Marshal(requestBody)
 
@@ -212,15 +213,26 @@ func (connection *Connection) DeleteUser(accessToken string) ([]byte, error) {
 }
 
 // RequestForTask starts a new task to synchronize real bankAccount and figoAccount
-func (connection *Connection) RequestForTask(accessToken string, taskToken string) ([]byte, error) {
+func (connection *Connection) RequestForTask(accessToken, taskToken, pin string) ([]byte, error) {
 	// build accessToken
 	accessToken = "Bearer " + accessToken
 
 	// build url
 	url := connection.Host + taskProgressURL + "?id=" + taskToken
 
+	body := map[string]interface{}{"continue": false, "save_pin": false}
+
+	if pin != "" {
+		body["pin"] = pin
+	}
+
+	payload, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+
 	// build request
-	request, err := http.NewRequest("POST", url, nil)
+	request, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
 	if err != nil {
 		return nil, err
 	}
