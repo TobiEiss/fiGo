@@ -153,7 +153,7 @@ func (connection *Connection) CredentialLogin(username string, password string) 
 }
 
 // SetupNewBankAccount add a new bankAccount to an existing figo-Account
-func (connection *Connection) SetupNewBankAccount(accessToken string, bankCode string, country string, credentials []string) ([]byte, error) {
+func (connection *Connection) SetupNewBankAccount(accessToken string, bankCode string, country string, credentials []string, savePin bool) ([]byte, error) {
 	// build accessToken
 	accessToken = "Bearer " + accessToken
 
@@ -165,7 +165,7 @@ func (connection *Connection) SetupNewBankAccount(accessToken string, bankCode s
 		"bank_code":   bankCode,
 		"country":     country,
 		"credentials": credentials,
-		"save_pin":    false,
+		"save_pin":    savePin,
 	}
 	jsonBody, err := json.Marshal(requestBody)
 
@@ -212,18 +212,26 @@ func (connection *Connection) DeleteUser(accessToken string) ([]byte, error) {
 	return buildRequestAndCheckResponse(request, accessToken)
 }
 
-// RequestForTask starts a new task to synchronize real bankAccount and figoAccount
-func (connection *Connection) RequestForTask(accessToken, taskToken, pin string) ([]byte, error) {
+// RequestForTask starts a new task or polls it to synchronize real bankAccount and figoAccount
+func (connection *Connection) RequestForTask(accessToken, taskToken string) ([]byte, error) {
+	return connection.RequestForTaskWithPinChallenge(accessToken, taskToken, "", false)
+}
+
+// RequestForTaskWithPinChallenge can be use to respond to a pin challenge that might occur when syncing
+func (connection *Connection) RequestForTaskWithPinChallenge(accessToken, taskToken, pin string, savePin bool) ([]byte, error) {
 	// build accessToken
 	accessToken = "Bearer " + accessToken
 
 	// build url
 	url := connection.Host + taskProgressURL + "?id=" + taskToken
 
-	body := map[string]interface{}{"continue": false, "save_pin": false}
+	body := map[string]interface{}{"continue": false}
 
 	if pin != "" {
 		body["pin"] = pin
+		if savePin {
+			body["save_pin"] = true
+		}
 	}
 
 	payload, err := json.Marshal(body)
