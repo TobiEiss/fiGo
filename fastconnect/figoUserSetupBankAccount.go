@@ -7,11 +7,11 @@ import (
 
 // SetupNewBankAccount add a bankAccount to an existing figoAccount
 // -> returns a taskToken
-func SetupNewBankAccount(connection fiGo.IConnection, accessToken string, bankCredentials BankCredentials) (string, error) {
+func SetupNewBankAccount(connection fiGo.IConnection, accessToken string, bankCredentials BankCredentials, savePin bool) (string, error) {
 	var taskToken string
 
 	// add BankAccount to figoAccount
-	answerByte, err := connection.SetupNewBankAccount(accessToken, bankCredentials.BankCode, bankCredentials.Country, bankCredentials.Credentials)
+	answerByte, err := connection.SetupNewBankAccount(accessToken, bankCredentials.BankCode, bankCredentials.Country, bankCredentials.Credentials, savePin)
 	if err != nil {
 		return taskToken, err
 	}

@@ -54,7 +54,7 @@ type IConnection interface {
 	// Add a BankAccount to figo-Account
 	// -> you get accessToken from the login-response
 	// -> country is something like "de" (for germany)
-	SetupNewBankAccount(accessToken string, bankCode string, country string, credentials []string) ([]byte, error)
+	SetupNewBankAccount(accessToken string, bankCode string, country string, credentials []string, savePin bool) ([]byte, error)
 
 	// http://docs.figo.io/#retrieve-all-bank-accounts
 	// Retrieves all bankAccounts for an user
@@ -213,8 +213,8 @@ func (connection *Connection) DeleteUser(accessToken string) ([]byte, error) {
 }
 
 // RequestForTask starts a new task or polls it to synchronize real bankAccount and figoAccount
-func (connection *Connection) RequestForTask(accessToken, taskToken string) ([]byte, error) {
-	return connection.RequestForTaskWithPinChallenge(accessToken, taskToken, "", false)
+func (connection *Connection) RequestForTask(accessToken, taskToken, pin string) ([]byte, error) {
+	return connection.RequestForTaskWithPinChallenge(accessToken, taskToken, pin, false)
 }
 
 // RequestForTaskWithPinChallenge can be use to respond to a pin challenge that might occur when syncing

@@ -95,7 +95,7 @@ func (fakeConnection *FakeConnection) DeleteUser(accessToken string) ([]byte, er
 }
 
 // RequestForTask should generate new transactions TODO
-func (fakeConnection *FakeConnection) RequestForTask(accessToken string, taskToken string) ([]byte, error) {
+func (fakeConnection *FakeConnection) RequestForTask(accessToken string, taskToken string, pin string) ([]byte, error) {
 	return nil, nil
 }
 
