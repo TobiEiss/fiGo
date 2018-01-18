@@ -66,8 +66,13 @@ type IConnection interface {
 
 	// http://docs.figo.io/#poll-task-state
 	// request a task
-	// -> you need a taskToken. You will get this from SetupNewBankAccount
-	RequestForTask(accessToken string, taskToken string, pin string) ([]byte, error)
+	// -> you need a taskToken. You will get this from SetupNewBankAccount or when triggering a manuel sync
+	RequestForTask(accessToken string, taskToken string) ([]byte, error)
+
+	// http://docs.figo.io/#poll-task-state
+	// request a task
+	// -> you need a taskToken. You will get this from SetupNewBankAccount or when triggering a manual sync
+	RequestForTaskWithPinChallenge(accessToken string, taskToken string, pin string, savePin bool) ([]byte, error)
 
 	// http://docs.figo.io/#retrieve-transactions-of-one-or-all-account
 	// Retrieves all Transactions
@@ -213,8 +218,8 @@ func (connection *Connection) DeleteUser(accessToken string) ([]byte, error) {
 }
 
 // RequestForTask starts a new task or polls it to synchronize real bankAccount and figoAccount
-func (connection *Connection) RequestForTask(accessToken, taskToken, pin string) ([]byte, error) {
-	return connection.RequestForTaskWithPinChallenge(accessToken, taskToken, pin, false)
+func (connection *Connection) RequestForTask(accessToken, taskToken string) ([]byte, error) {
+	return connection.RequestForTaskWithPinChallenge(accessToken, taskToken, "", false)
 }
 
 // RequestForTaskWithPinChallenge can be use to respond to a pin challenge that might occur when syncing
