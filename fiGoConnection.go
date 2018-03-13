@@ -256,12 +256,12 @@ func (connection *Connection) RequestForTaskWithPinChallenge(accessToken, taskTo
 // SyncTask represents a synchronization task
 type SyncTask struct {
 	State                string   `json:"state"`
-	RedirectURI          string   `json:"redirect_uri"`
-	DisableNotifications bool     `json:"disable_notifications"`
-	IfNotSyncedSince     int      `json:"if_not_synced_since"`
-	AutoContinue         bool     `json:"auto_continue"`
-	AccountIds           []string `json:"account_ids"`
-	SyncTasks            []string `json:"sync_tasks"`
+	RedirectURI          string   `json:"redirect_uri,omitempty"`
+	DisableNotifications bool     `json:"disable_notifications,omitempty"`
+	IfNotSyncedSince     int      `json:"if_not_synced_since,omitempty"`
+	AutoContinue         bool     `json:"auto_continue,omitempty"`
+	AccountIds           []string `json:"account_ids,omitempty"`
+	SyncTasks            []string `json:"sync_tasks,omitempty"`
 }
 
 // CreateSynchronizationTask creates a new task to synchronize
