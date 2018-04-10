@@ -493,6 +493,11 @@ func buildRequestAndCheckResponse(request *http.Request, authString string) ([]b
 				return body, ErrUserAlreadyExists
 			} else if value == 90000 {
 				return body, ErrHTTPUnauthorized
+			} else {
+				msg, ok := jsonParsed.Path("error.description").Data().(string)
+				if ok {
+					return body, errors.New(msg)
+				}
 			}
 		}
 	}
